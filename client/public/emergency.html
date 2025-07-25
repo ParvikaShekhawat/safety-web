@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SheGuard - Emergency Contacts & Resources</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Scrollbar for contacts */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Smooth fade-in animation */
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Modal backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active {
+      display: flex;
+      opacity: 1;
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans">
+
+  <!-- Fixed SOS Button -->
+  <button
+    id="panicButton"
+    aria-label="Emergency SOS Button"
+    title="Press 3 times to send emergency alert"
+    class="fixed bottom-8 right-8 z-50 w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full shadow-lg hover:shadow-2xl text-white text-3xl font-extrabold flex items-center justify-center cursor-pointer animate-pulse transition-transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-400"
+  >
+    SOS
+  </button>
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50 w-full">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between max-w-7xl">
+      <div class="flex items-center space-x-3">
+        <img
+          src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7f18433-e8eb-4bc2-8ea1-33ab8866fa1f.png"
+          alt="SheGuard Logo"
+          class="w-10 h-10 rounded-lg"
+        />
+        <span class="text-2xl font-playfair font-bold text-teal-700 select-none">SheGuard</span>
+      </div>
+      <a href="dashboard.html" class="flex items-center text-teal-700 font-semibold hover:text-teal-900 transition focus:outline-none focus:ring-2 focus:ring-teal-400 rounded px-3 py-1 select-none">
+        <i class="fas fa-arrow-left mr-2"></i> Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-6 py-10 max-w-7xl space-y-16">
+
+    <!-- Emergency Contacts Section -->
+    <section>
+      <h2 class="text-3xl font-bold text-teal-700 mb-8 text-center md:text-left">Important Emergency Contacts</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 scrollbar-hide max-h-96 overflow-y-auto">
+        
+        <!-- Women’s Helpline -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-female"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Women’s Helpline</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-phone-alt mr-2"></i> 1800 425 3330
+          </p>
+          <p class="text-gray-600 text-sm">24/7 support for women in distress.</p>
+        </div>
+
+        <!-- National Domestic Violence Hotline -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in" style="animation-delay: 0.1s;">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-home"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">National Domestic Violence Hotline</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-phone-alt mr-2"></i> 1-800-799-7233
+          </p>
+          <p class="text-gray-600 text-sm">Confidential support for domestic violence victims.</p>
+        </div>
+
+        <!-- Sexual Assault Hotline -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in" style="animation-delay: 0.2s;">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Sexual Assault Hotline</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-phone-alt mr-2"></i> 1-800-656-4673
+          </p>
+          <p class="text-gray-600 text-sm">Support for survivors of sexual assault.</p>
+        </div>
+
+        <!-- Crisis Text Line -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in" style="animation-delay: 0.3s;">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-sms"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Crisis Text Line</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-comment-alt mr-2"></i> Text "HELLO" to 741741
+          </p>
+          <p class="text-gray-600 text-sm">Free 24/7 support via text message.</p>
+        </div>
+
+        <!-- Suicide Prevention Lifeline -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in" style="animation-delay: 0.4s;">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Suicide Prevention Lifeline</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-phone-alt mr-2"></i> 1-800-273-8255
+          </p>
+          <p class="text-gray-600 text-sm">24/7 support for individuals in crisis.</p>
+        </div>
+
+        <!-- Rape Crisis Center -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition fade-in" style="animation-delay: 0.5s;">
+          <div class="text-teal-600 text-5xl mb-4">
+            <i class="fas fa-shield-virus"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Rape Crisis Center</h3>
+          <p class="text-gray-700 mb-3">
+            <i class="fas fa-phone-alt mr-2"></i> 1-800-656-4673
+          </p>
+          <p class="text-gray-600 text-sm">Support for survivors of rape and sexual assault.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NGOs and Therapy Resources Section -->
+    <section>
+      <h2 class="text-3xl font-bold text-teal-700 mb-8 text-center md:text-left">NGOs and Therapy Resources</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition fade-in">
+          <h3 class="text-xl font-semibold mb-2">Local NGOs</h3>
+          <ul class="list-disc list-inside text-gray-700">
+            <li><a href="https://sewabharat.org/contact/" class="text-teal-600 hover:underline">NGO 1: Women Empowerment</a> - Focused on women's rights and empowerment.</li>
+            <li><a href="https://give.do/nonprofits/snehalaya?utm_source=Blog&amp;utm_campaign=10 NGOs helping victims of violence against women fight back&amp;utm_medium=BlogPage&amp;utm_term=Give&amp;utm_content=Fundraiser&amp;utm_type=OneTime" class="text-teal-600 hover:underline">NGO 2: Safe Haven</a> - Provides shelter and support for domestic violence victims.</li>
+            <li><a href="https://www.arpan.org.in/mental-health-services/" class="text-teal-600 hover:underline">NGO 3: Healing Hearts</a> - Offers counseling and therapy for survivors of abuse.</li>
+            <li><a href="http://www.azadfoundation.com/" class="text-teal-600 hover:underline">NGO 4: Voices of Women</a> - Advocacy and support for women's issues.</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition fade-in">
+          <h3 class="text-xl font-semibold mb-2">Therapy Resources</h3>
+          <ul class="list-disc list-inside text-gray-700">
+            <li><a href="https://www.centerformentalhealth.in/tag/trauma-informed-focused-therapy-in-india/" class="text-teal-600 hover:underline">Therapy Center 1</a> - Specializes in trauma-informed care.</li>
+            <li><a href="https://www.apa.org/topics/psychotherapy/group-therapy" class="text-teal-600 hover:underline">Therapy Center 2</a> - Offers group therapy sessions.</li>
+            <li><a href="https://www.betterhelp.com/get-started/?go=true&transaction_id=1024cd77d9ec34178aa285ed3099d5&utm_source=affiliate&utm_campaign=3811&utm_medium=Desktop&utm_content=&utm_term=forbeshealth&not_found=1&gor=start" class="text-teal-600 hover:underline">Therapy Center 3</a> - Provides online therapy options.</li>
+            <li><a href="https://www.abhasa.in/articles/power-of-rehab-for-womens-mental-health/" class="text-teal-600 hover:underline">Therapy Center 4</a> - Focuses on women's mental health.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section>
+      <h2 class="text-3xl font-bold text-teal-700 mb-6 text-center md:text-left">Articles for Women’s Protection</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition cursor-pointer fade-in">
+          <h3 class="text-xl font-semibold mb-2">10 Essential Safety Tips for Women</h3>
+          <p class="text-gray-700 mb-4">Learn practical tips to stay safe in everyday situations.</p>
+          <button class="text-teal-600 font-semibold hover:underline" onclick="openModal('article1')">Read More &rarr;</button>
+        </article>
+        <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition cursor-pointer fade-in" style="animation-delay: 0.1s;">
+          <h3 class="text-xl font-semibold mb-2">How to Use Self Defense Tools Effectively</h3>
+          <p class="text-gray-700 mb-4">A guide to common self defense tools and their proper use.</p>
+          <button class="text-teal-600 font-semibold hover:underline" onclick="openModal('article2')">Read More &rarr;</button>
+        </article>
+        <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition cursor-pointer fade-in" style="animation-delay: 0.2s;">
+          <h3 class="text-xl font-semibold mb-2">Recognizing and Avoiding Dangerous Situations</h3>
+          <p class="text-gray-700 mb-4">Tips on how to identify and steer clear of risky environments.</p>
+          <button class="text-teal-600 font-semibold hover:underline" onclick="openModal('article3')">Read More &rarr;</button>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+    <!-- Modal -->
+  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1" onclick="closeModal(event)">
+    <div class="bg-white rounded-xl max-w-3xl w-full p-8 relative shadow-2xl">
+      <button aria-label="Close modal" class="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold focus:outline-none" onclick="closeModal(event)">&times;</button>
+      <h2 id="modalTitle" class="text-2xl font-playfair font-bold mb-4"></h2>
+      <div id="modalContent" class="text-gray-700 text-lg leading-relaxed"></div>
+    </div>
+  </div>
+
+  <!-- SOS Countdown Modal -->
+<div id="sosModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Emergency Alert</h2>
+    <p class="text-gray-700 mb-2">Sending SOS to your trusted contacts in</p>
+    <div class="text-5xl font-extrabold text-red-600 mb-4">
+      <span id="sosCountdown">5</span>
+    </div>
+    <p id="sosLocationText" class="text-sm text-gray-600 mb-4">Fetching your location…</p>
+    <div class="flex justify-center gap-3">
+      <button id="cancelSosBtn" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SOS Success Modal -->
+<div id="sosSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-green-600 mb-2">Message Sent!</h2>
+    <p class="text-gray-700 mb-4">Your trusted contacts were notified with your current location.</p>
+    <button id="closeSuccessBtn" class="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700">
+      Close
+    </button>
+  </div>
+</div>
+
+<script>
+  const articlesContent = {
+      article1: {
+        title: "10 Essential Safety Tips for Women",
+        content: `
+          <p>Women’s safety is paramount. Here are 10 essential tips to help you stay safe:</p>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li>Be aware of your surroundings at all times.</li>
+            <li>Trust your instincts and avoid risky situations.</li>
+            <li>Keep your phone charged and accessible.</li>
+            <li>Inform someone you trust about your whereabouts.</li>
+            <li>Learn basic self-defense techniques.</li>
+            <li>Use well-lit and populated routes.</li>
+            <li>Carry personal safety devices like whistles or pepper spray.</li>
+            <li>Stay sober and alert in social situations.</li>
+            <li>Set boundaries and communicate clearly.</li>
+            <li>Seek help immediately if you feel threatened.</li>
+          </ul>
+        `
+      },
+      article2: {
+        title: "How to Use Self Defense Tools Effectively",
+        content: `
+          <p>Self-defense tools can empower you to protect yourself. Here’s how to use them effectively:</p>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li>Familiarize yourself with the tool before carrying it.</li>
+            <li>Practice regularly to build confidence and skill.</li>
+            <li>Understand the legal regulations in your area.</li>
+            <li>Use tools like pepper spray, stun guns, or personal alarms responsibly.</li>
+            <li>Always aim for vulnerable areas like eyes, throat, or groin.</li>
+            <li>Stay calm and focused during an encounter.</li>
+            <li>Combine tools with verbal assertiveness and escape tactics.</li>
+          </ul>
+        `
+      },
+      article3: {
+        title: "Recognizing and Avoiding Dangerous Situations",
+        content: `
+          <p>Being able to recognize danger early can save your life. Here are some tips:</p>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li>Notice unusual behavior or body language.</li>
+            <li>Be cautious in isolated or poorly lit areas.</li>
+            <li>Trust your gut feelings and remove yourself if uncomfortable.</li>
+            <li>Avoid distractions like headphones or excessive phone use.</li>
+            <li>Stay in groups when possible.</li>
+            <li>Have an exit plan in unfamiliar places.</li>
+            <li>Report suspicious activity to authorities.</li>
+          </ul>
+        `
+      }
+    };
+    function openModal(articleId) {
+      const modal = document.getElementById('modal');
+      const titleEl = document.getElementById('modalTitle');
+      const contentEl = document.getElementById('modalContent');
+      const article = articlesContent[articleId];
+      if (!article) return;
+      titleEl.innerText = article.title;
+      contentEl.innerHTML = article.content;
+      modal.classList.add('active');
+      modal.focus();
+    }
+    function closeModal(event) {
+      // Prevent closing if clicking inside modal content
+      if (event.target.closest('#modal > div')) return;
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+      document.getElementById('modalTitle').innerText = '';
+      document.getElementById('modalContent').innerHTML = '';
+    }
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('modal');
+        if (modal.classList.contains('active')) {
+          closeModal({ target: modal });
+        }
+      }
+    });
+    
+</script>
+
+  <script>
+// SOS button logic
+sosButton.addEventListener('click', function () {
+  if (contacts.length === 0) {
+    displayMessage("🚫 Please add at least one trusted contact.");
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    displayMessage("❌ Geolocation is not supported by your browser.");
+    return;
+  }
+
+  displayMessage("📡 Getting your location...");
+  
+  navigator.geolocation.getCurrentPosition(success, error);
+});
+
+function success(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+
+  const locationURL = `https://maps.google.com/?q=${latitude},${longitude}`;
+  const message = `🚨 Emergency! I need help. My location: ${locationURL}`;
+
+  sendMessageToContacts(message);
+}
+
+function error() {
+  displayMessage("❌ Location access denied or unavailable.");
+}
+
+function displayMessage(msg) {
+  messageDiv.textContent = msg;
+  messageDiv.classList.remove('hidden');
+}
+</script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const panicButton = document.getElementById('panicButton');
+  const sosModal = document.getElementById('sosModal');
+  const sosCountdownEl = document.getElementById('sosCountdown');
+  const cancelSosBtn = document.getElementById('cancelSosBtn');
+  const sosLocationText = document.getElementById('sosLocationText');
+  const sosSuccessModal = document.getElementById('sosSuccessModal');
+  const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+  // Adjust this to your backend URL (must implement /api/sos)
+  const SOS_API_URL = 'http://localhost:3000/api/sos';
+
+  // triple-press detection
+  const CLICK_WINDOW_MS = 2000;
+  let clickTimes = [];
+
+  let countdownTimer = null;
+  let countdown = 5;
+  let geo = null;
+  let cancelled = false;
+
+  // 1) Detect triple click
+  panicButton.addEventListener('click', () => {
+    const now = Date.now();
+    clickTimes.push(now);
+    // keep only clicks inside window
+    clickTimes = clickTimes.filter((t) => now - t <= CLICK_WINDOW_MS);
+
+    if (clickTimes.length >= 3) {
+      clickTimes = [];
+      launchSOS();
+    }
+  });
+
+  async function launchSOS() {
+    cancelled = false;
+    countdown = 5;
+    sosCountdownEl.textContent = countdown.toString();
+    sosLocationText.textContent = 'Fetching your location…';
+    show(sosModal);
+
+    // get contacts from localStorage
+    const contacts = JSON.parse(localStorage.getItem('trustedContacts')) || [];
+    if (!contacts.length) {
+      alert('No trusted contacts found. Please add one first.');
+      hide(sosModal);
+      return;
+    }
+
+    // get location
+    try {
+      geo = await getLocation();
+      const mapLink = `https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+      sosLocationText.innerHTML = `
+        Location detected:<br />
+        <a href="${mapLink}" target="_blank" class="text-blue-600 underline">
+          ${geo.latitude.toFixed(5)}, ${geo.longitude.toFixed(5)}
+        </a>
+      `;
+    } catch (e) {
+      geo = null;
+      sosLocationText.textContent = 'Could not get location (user denied or unavailable). Still proceeding.';
+    }
+
+    // 2) Start countdown
+    countdownTimer = setInterval(async () => {
+      if (cancelled) return;
+      countdown--;
+      sosCountdownEl.textContent = countdown.toString();
+
+      if (countdown <= 0) {
+        clearInterval(countdownTimer);
+        await sendSOS(contacts, geo);
+      }
+    }, 1000);
+  }
+
+  cancelSosBtn.addEventListener('click', () => {
+    cancelled = true;
+    clearInterval(countdownTimer);
+    hide(sosModal);
+  });
+
+  closeSuccessBtn.addEventListener('click', () => {
+    hide(sosSuccessModal);
+  });
+
+  async function sendSOS(contacts, geo) {
+    // build message
+    let msg = '🚨 EMERGENCY! I need help.\n';
+    if (geo) {
+      msg += `My location: https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+    } else {
+      msg += 'Location not available.';
+    }
+
+    try {
+      // call backend to actually send SMS/WhatsApp/etc.
+      await fetch(SOS_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contacts,
+          message: msg,
+          location: geo,
+        }),
+      });
+
+      hide(sosModal);
+      show(sosSuccessModal);
+    } catch (err) {
+      console.error('SOS send error:', err);
+      hide(sosModal);
+      alert('Failed to send SOS. Please check your internet or backend.');
+    }
+  }
+
+  function getLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+          });
+        },
+        (err) => reject(err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    });
+  }
+
+  function show(el) {
+    el?.classList.remove('hidden');
+  }
+  function hide(el) {
+    el?.classList.add('hidden');
+  }
+});
+</script>
+</body>
+</html>

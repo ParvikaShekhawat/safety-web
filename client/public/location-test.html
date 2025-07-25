@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Location Debug Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: sans-serif; margin: 40px; line-height: 1.6; }
+    code { background: #eee; padding: 2px 4px; border-radius: 4px; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>📍 Location Test</h1>
+  <p><strong>Goal:</strong> Check if <code>navigator.geolocation</code> works in your browser.</p>
+
+  <div id="status">🔄 Detecting location...</div>
+  <div id="output"></div>
+
+  <script>
+    const status = document.getElementById('status');
+    const output = document.getElementById('output');
+
+    function showSuccess(coords) {
+      const { latitude, longitude, accuracy } = coords;
+      status.innerHTML = "<span class='success'>✅ Geolocation Success!</span>";
+      output.innerHTML = `
+        <ul>
+          <li><strong>Latitude:</strong> ${latitude}</li>
+          <li><strong>Longitude:</strong> ${longitude}</li>
+          <li><strong>Accuracy:</strong> ${accuracy} meters</li>
+          <li><a href="https://maps.google.com/?q=${latitude},${longitude}" target="_blank">📍 Open in Google Maps</a></li>
+        </ul>
+      `;
+    }
+
+    function showIPFallback(ipData) {
+      status.innerHTML = "<span class='error'>⚠️ Geolocation failed. Using IP-based location.</span>";
+      output.innerHTML = `
+        <ul>
+          <li><strong>City:</strong> ${ipData.city}</li>
+          <li><strong>Region:</strong> ${ipData.region}</li>
+          <li><strong>Country:</strong> ${ipData.country_name}</li>
+          <li><strong>Latitude:</strong> ${ipData.latitude}</li>
+          <li><strong>Longitude:</strong> ${ipData.longitude}</li>
+          <li><a href="https://maps.google.com/?q=${ipData.latitude},${ipData.longitude}" target="_blank">📍 Open in Google Maps</a></li>
+        </ul>
+      `;
+    }
+
+    function getIPLocationFallback() {
+      fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => showIPFallback(data))
+        .catch(err => {
+          status.innerHTML = "<span class='error'>❌ Failed to fetch location from IP as well.</span>";
+          output.innerText = err.message;
+        });
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => showSuccess(position.coords),
+        error => {
+          status.innerHTML = `<span class='error'>❌ Geolocation failed: ${error.message}</span>`;
+          getIPLocationFallback();
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      status.innerHTML = "<span class='error'>❌ Geolocation not supported by this browser.</span>";
+      getIPLocationFallback();
+    }
+  </script>
+</body>
+</html>

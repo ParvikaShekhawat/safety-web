@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SheGuard - Self Defense Videos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Modal backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active {
+      display: flex;
+      opacity: 1;
+    }
+    /* Video card hover overlay */
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+    .video-card img {
+      display: block;
+      width: 100%;
+      height: 9rem;
+      object-fit: cover;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .video-card .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .video-card:hover .overlay {
+      opacity: 1;
+    }
+    .play-icon {
+      color: white;
+      font-size: 3rem;
+      filter: drop-shadow(0 0 3px rgba(0,0,0,0.7));
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Fixed SOS Button -->
+  <button
+    id="panicButton"
+    aria-label="Emergency SOS Button"
+    title="Press 3 times to send emergency alert"
+    class="fixed bottom-8 right-8 z-50 w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full shadow-lg hover:shadow-2xl text-white text-3xl font-extrabold flex items-center justify-center cursor-pointer animate-pulse transition-transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-400"
+  >
+    SOS
+  </button>
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50 w-full">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between max-w-7xl">
+      <div class="flex items-center space-x-3">
+        <img
+          src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7f18433-e8eb-4bc2-8ea1-33ab8866fa1f.png"
+          alt="SheGuard Logo"
+          class="w-10 h-10 rounded-lg"
+        />
+        <span class="text-2xl font-playfair font-bold text-teal-700">SheGuard</span>
+      </div>
+      <a href="dashboard.html" class="flex items-center text-teal-700 font-semibold hover:text-teal-900 transition focus:outline-none focus:ring-2 focus:ring-teal-400 rounded px-3 py-1 select-none">
+        <i class="fas fa-arrow-left mr-2"></i> Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <section class="container mx-auto px-6 py-16 max-w-7xl rounded-3xl overflow-hidden" style="background-image: url('https://i.pinimg.com/736x/23/31/0a/23310aa9e15faaec86eb72f5a14f9e96.jpg'); background-position: center;">
+    <h1 class="text-4xl font-playfair font-bold text-white mb-12 text-center drop-shadow-lg">
+      Self Defense Videos
+    </h1>
+
+    <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 bg-white bg-opacity-80 p-6 rounded-xl shadow-lg max-h-[80vh] overflow-y-auto">
+      <!-- Video cards -->
+      <div class="video-card bg-white relative rounded-xl shadow-lg cursor-pointer overflow-hidden transform transition-transform hover:scale-105 hover:shadow-xl hover:z-10" onclick="openVideoModal('KVpxP3ZZtAc')">
+        <img src="https://th.bing.com/th?&id=OVP.a4rYFl67nkQj4PxANSupnQHgFo&w=424&h=238&c=7&pid=2.1&rs=1" alt="Krav Maga basics with Ronda Rousey" class="h-56 w-full object-cover" />
+        <div class="p-5">
+          <div class="flex items-center space-x-3 mb-2">
+            <div class="bg-teal-100 w-8 h-8 rounded-full flex items-center justify-center">
+              <i class="fas fa-user-shield text-teal-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-teal-800">HER Network</h3>
+          </div>
+          <h4 class="text-lg font-semibold mb-2">E5 Self-Defense Moves Every Woman Should Know</h4>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-500"><i class="fas fa-clock mr-1"></i> 12 min</span>
+            <span class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">Beginner</span>
+          </div>
+        </div>
+        <div class="overlay absolute inset-0 flex items-center justify-center pointer-events-none rounded-t-xl">
+          <i class="fas fa-play-circle play-icon"></i>
+        </div>
+      </div>
+
+      <div class="video-card bg-white relative rounded-xl shadow-lg cursor-pointer overflow-hidden transform transition-transform hover:scale-105 hover:shadow-xl hover:z-10" onclick="openVideoModal('B725c7vi1xk')">
+        <img src="https://th.bing.com/th?&id=OVP.r0oi0555IHy32OYoPckIjAHgFo&w=308&h=172&c=7&pid=2.1&rs=1" alt="Self-defense with Amanda Nunes" class="h-56 w-full object-cover" />
+        <div class="p-5">
+          <div class="flex items-center space-x-3 mb-2">
+            <div class="bg-teal-100 w-8 h-8 rounded-full flex items-center justify-center">
+              <i class="fas fa-user-shield text-teal-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-teal-800">Elhusseiny Wageh</h3>
+          </div>
+          <h4 class="text-lg font-semibold mb-2">10 Amazing Self Defense Techniques</h4>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-500"><i class="fas fa-clock mr-1"></i> 18 min</span>
+            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Intermediate</span>
+          </div>
+        </div>
+        <div class="overlay absolute inset-0 flex items-center justify-center pointer-events-none rounded-t-xl">
+          <i class="fas fa-play-circle play-icon"></i>
+        </div>
+      </div>
+
+      <div class="video-card bg-white relative rounded-xl shadow-lg cursor-pointer overflow-hidden transform transition-transform hover:scale-105 hover:shadow-xl hover:z-10" onclick="openVideoModal('q1pBBRi3XF8')">
+        <img src="https://th.bing.com/th/id/OVP.H2qNBb_0etSt3rFr-MZgvQEsDh?w=243&h=136&c=7&rs=1&qlt=70&o=7&dpr=1.3&pid=2.1&rm=3" alt="Empowerment with Megan Anderson" class="h-56 w-full object-cover" />
+        <div class="p-5">
+          <div class="flex items-center space-x-3 mb-2">
+            <div class="bg-teal-100 w-8 h-8 rounded-full flex items-center justify-center">
+              <i class="fas fa-user-shield text-teal-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-teal-800">Darshansthetics</h3>
+          </div>
+          <h4 class="text-lg font-semibold mb-2">This is what actually works</h4>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-500"><i class="fas fa-clock mr-1"></i> 22 min</span>
+            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Advanced</span>
+          </div>
+        </div>
+        <div class="overlay absolute inset-0 flex items-center justify-center pointer-events-none rounded-t-xl">
+          <i class="fas fa-play-circle play-icon"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="videoModalTitle" tabindex="-1">
+      <div class="bg-black rounded-2xl max-w-5xl w-full aspect-video relative shadow-2xl ring-4 ring-teal-600">
+        <button id="closeModalBtn" aria-label="Close video" class="absolute top-4 right-4 text-white text-4xl hover:text-red-500 focus:outline-none focus:ring-4 focus:ring-red-500 rounded-full p-1 bg-black bg-opacity-50">
+          &times;
+        </button>
+        <iframe
+          id="youtubeIframe"
+          class="w-full h-full rounded-2xl"
+          src=""
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="YouTube video player"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Support Section -->
+    <div class="mt-16 bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 shadow-inner">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-teal-800 mb-4">You Are Not Alone</h2>
+        <p class="text-lg text-gray-700 mb-6">"Courage doesn't mean you don't get afraid. Courage means you don't let fear stop you." - <span class="font-semibold">Bethany Hamilton</span></p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-pink-600 text-3xl mb-3">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">24/7 Crisis Support</h3>
+            <p class="text-gray-600 text-sm">Call 1-800-656-HOPE (4673)</p>
+            <p class="text-gray-600 text-sm">Call 1-800-273-TALK (8255)</p>
+            <p class="text-gray-600 text-sm">Text "HELLO" to 741741</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-teal-600 text-3xl mb-3">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Therapy Resources</h3>
+            <p class="text-gray-600 text-sm">Find trauma-informed therapists</p>
+            <p class="text-gray-600 text-sm">Visit <a href="https://www.psychologytoday.com/us/therapists" class="text-teal-600 underline">Psychology Today</a></p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-purple-600 text-3xl mb-3">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Support Groups</h3>
+            <p class="text-gray-600 text-sm">Connect with survivors</p>
+            <p class="text-gray-600 text-sm">Visit <a href="https://www.rainn.org/get-help" class="text-teal-600 underline">RAINN</a> for resources</p>
+          </div>
+        </div>
+        
+        <a href="emergency.html" class="inline-block bg-gradient-to-r from-teal-600 to-purple-600 text-white px-6 py-3 rounded-full font-bold hover:shadow-lg transition-all hover:opacity-90">
+          <i class="fas fa-heart mr-2"></i> Get Support Now
+        </a>
+      </div>
+    </div>
+
+    <!-- Warrior Women Quotes -->
+    <div class="mt-16">
+      <h2 class="text-3xl font-bold text-center text-teal-800 mb-12">Words From Warriors</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-transform">
+          <img src="https://th.bing.com/th/id/OIP.8M-iQ1w_HjJT93oufN5R3gHaE8?w=257&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Malala Yousafzai" class="w-full h-48 ">
+          <div class="p-6 bg-gradient-to-b from-white to-teal-50">
+            <blockquote class="text-gray-700 italic mb-4">"We realize the importance of our voices only when we are silenced."</blockquote>
+            <div class="flex items-center">
+              <div class="bg-teal-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-quote-left text-teal-600"></i>
+              </div>
+              <div class="ml-3">
+                <p class="font-bold text-gray-900">Malala Yousafzai</p>
+                <p class="text-sm text-gray-500">Nobel Peace Prize Laureate</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-transform">
+          <img src="https://th.bing.com/th/id/OIP.xKDdM-1VkdENC4UxHmIXJgHaEJ?w=286&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Tarana Burke" class="w-full h-48 object-cover">
+          <div class="p-6 bg-gradient-to-b from-white to-pink-50">
+            <blockquote class="text-gray-700 italic mb-4">"Our silence has protected the perpetrators and harmed the harmed."</blockquote>
+            <div class="flex items-center">
+              <div class="bg-pink-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-quote-left text-pink-600"></i>
+              </div>
+              <div class="ml-3">
+                <p class="font-bold text-gray-900">Tarana Burke</p>
+                <p class="text-sm text-gray-500">Founder of #MeToo Movement</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-transform">
+          <img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd" alt="Ruth Bader Ginsburg" class="w-full h-48 object-cover">
+          <div class="p-6 bg-gradient-to-b from-white to-purple-50">
+            <blockquote class="text-gray-700 italic mb-4">"Women belong in all places where decisions are being made."</blockquote>
+            <div class="flex items-center">
+              <div class="bg-purple-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-quote-left text-purple-600"></i>
+              </div>
+              <div class="ml-3">
+                <p class="font-bold text-gray-900">Ruth Bader Ginsburg</p>
+                <p class="text-sm text-gray-500">U.S. Supreme Court Justice</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOS Countdown Modal -->
+<div id="sosModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Emergency Alert</h2>
+    <p class="text-gray-700 mb-2">Sending SOS to your trusted contacts in</p>
+    <div class="text-5xl font-extrabold text-red-600 mb-4">
+      <span id="sosCountdown">5</span>
+    </div>
+    <p id="sosLocationText" class="text-sm text-gray-600 mb-4">Fetching your location…</p>
+    <div class="flex justify-center gap-3">
+      <button id="cancelSosBtn" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SOS Success Modal -->
+<div id="sosSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-green-600 mb-2">Message Sent!</h2>
+    <p class="text-gray-700 mb-4">Your trusted contacts were notified with your current location.</p>
+    <button id="closeSuccessBtn" class="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700">
+      Close
+    </button>
+  </div>
+</div>
+
+  <script>
+    const videoModal = document.getElementById('videoModal');
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function openVideoModal(videoId) {
+      youtubeIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      videoModal.classList.add('active');
+    }
+
+    function closeModal() {
+      videoModal.classList.remove('active');
+      youtubeIframe.src = ''; // Stop the video when closing
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  </script>
+
+    <script>
+// SOS button logic
+sosButton.addEventListener('click', function () {
+  if (contacts.length === 0) {
+    displayMessage("🚫 Please add at least one trusted contact.");
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    displayMessage("❌ Geolocation is not supported by your browser.");
+    return;
+  }
+
+  displayMessage("📡 Getting your location...");
+  
+  navigator.geolocation.getCurrentPosition(success, error);
+});
+
+function success(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+
+  const locationURL = `https://maps.google.com/?q=${latitude},${longitude}`;
+  const message = `🚨 Emergency! I need help. My location: ${locationURL}`;
+
+  sendMessageToContacts(message);
+}
+
+function error() {
+  displayMessage("❌ Location access denied or unavailable.");
+}
+
+function displayMessage(msg) {
+  messageDiv.textContent = msg;
+  messageDiv.classList.remove('hidden');
+}
+</script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const panicButton = document.getElementById('panicButton');
+  const sosModal = document.getElementById('sosModal');
+  const sosCountdownEl = document.getElementById('sosCountdown');
+  const cancelSosBtn = document.getElementById('cancelSosBtn');
+  const sosLocationText = document.getElementById('sosLocationText');
+  const sosSuccessModal = document.getElementById('sosSuccessModal');
+  const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+  // Adjust this to your backend URL (must implement /api/sos)
+  const SOS_API_URL = 'http://localhost:3000/api/sos';
+
+  // triple-press detection
+  const CLICK_WINDOW_MS = 2000;
+  let clickTimes = [];
+
+  let countdownTimer = null;
+  let countdown = 5;
+  let geo = null;
+  let cancelled = false;
+
+  // 1) Detect triple click
+  panicButton.addEventListener('click', () => {
+    const now = Date.now();
+    clickTimes.push(now);
+    // keep only clicks inside window
+    clickTimes = clickTimes.filter((t) => now - t <= CLICK_WINDOW_MS);
+
+    if (clickTimes.length >= 3) {
+      clickTimes = [];
+      launchSOS();
+    }
+  });
+
+  async function launchSOS() {
+    cancelled = false;
+    countdown = 5;
+    sosCountdownEl.textContent = countdown.toString();
+    sosLocationText.textContent = 'Fetching your location…';
+    show(sosModal);
+
+    // get contacts from localStorage
+    const contacts = JSON.parse(localStorage.getItem('trustedContacts')) || [];
+    if (!contacts.length) {
+      alert('No trusted contacts found. Please add one first.');
+      hide(sosModal);
+      return;
+    }
+
+    // get location
+    try {
+      geo = await getLocation();
+      const mapLink = `https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+      sosLocationText.innerHTML = `
+        Location detected:<br />
+        <a href="${mapLink}" target="_blank" class="text-blue-600 underline">
+          ${geo.latitude.toFixed(5)}, ${geo.longitude.toFixed(5)}
+        </a>
+      `;
+    } catch (e) {
+      geo = null;
+      sosLocationText.textContent = 'Could not get location (user denied or unavailable). Still proceeding.';
+    }
+
+    // 2) Start countdown
+    countdownTimer = setInterval(async () => {
+      if (cancelled) return;
+      countdown--;
+      sosCountdownEl.textContent = countdown.toString();
+
+      if (countdown <= 0) {
+        clearInterval(countdownTimer);
+        await sendSOS(contacts, geo);
+      }
+    }, 1000);
+  }
+
+  cancelSosBtn.addEventListener('click', () => {
+    cancelled = true;
+    clearInterval(countdownTimer);
+    hide(sosModal);
+  });
+
+  closeSuccessBtn.addEventListener('click', () => {
+    hide(sosSuccessModal);
+  });
+
+  async function sendSOS(contacts, geo) {
+    // build message
+    let msg = '🚨 EMERGENCY! I need help.\n';
+    if (geo) {
+      msg += `My location: https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+    } else {
+      msg += 'Location not available.';
+    }
+
+    try {
+      // call backend to actually send SMS/WhatsApp/etc.
+      await fetch(SOS_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contacts,
+          message: msg,
+          location: geo,
+        }),
+      });
+
+      hide(sosModal);
+      show(sosSuccessModal);
+    } catch (err) {
+      console.error('SOS send error:', err);
+      hide(sosModal);
+      alert('Failed to send SOS. Please check your internet or backend.');
+    }
+  }
+
+  function getLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+          });
+        },
+        (err) => reject(err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    });
+  }
+
+  function show(el) {
+    el?.classList.remove('hidden');
+  }
+  function hide(el) {
+    el?.classList.add('hidden');
+  }
+});
+</script>
+
+  <!-- FontAwesome CDN for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

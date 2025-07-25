@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SheGuard - Women's Safety Companion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fafb;
+    }
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.6s ease forwards;
+    }
+
+    /* Moving background animation */
+    .bg-moving {
+      background-image: url('https://i.pinimg.com/736x/77/f4/19/77f419d3362ae78a2030f6e3f205c6be.jpg');
+      background-size: 150% 100%;
+      animation: moveBG 30s linear infinite;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    @keyframes moveBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    /* Marquee animation */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-content {
+      display: flex;
+      gap: 1.5rem;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+    }
+    /* Pause animation on hover */
+    .marquee:hover .marquee-content {
+      animation-play-state: paused;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active {
+      display: flex;
+      opacity: 1;
+    }
+
+
+  </style>
+</head>
+<body class="bg-gray-100 relative">
+
+  <!-- Fixed SOS Button -->
+  <button
+    id="panicButton"
+    aria-label="Emergency SOS Button"
+    title="Press 3 times to send emergency alert"
+    class="fixed bottom-8 right-8 z-50 w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full shadow-lg hover:shadow-2xl text-white text-3xl font-extrabold flex items-center justify-center cursor-pointer animate-pulse transition-transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-400"
+  >
+    SOS
+  </button>
+  <!-- Status message for showing success/failure -->
+<div id="statusMsg" class="hidden fixed bottom-32 right-8 bg-white border border-gray-300 text-black px-4 py-2 rounded shadow-lg z-50">
+  <!-- Message will appear here -->
+</div>
+
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+    <div class="container mx-auto flex items-center justify-between px-6 py-4">
+      <div class="flex items-center space-x-3">
+        <img
+          src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7f18433-e8eb-4bc2-8ea1-33ab8866fa1f.png"
+          alt="SheGuard Logo"
+          class="w-10 h-10 rounded-lg"
+        />
+        <span class="text-2xl font-playfair font-bold text-teal-700">SheGuard</span>
+      </div>
+      <div class="hidden md:flex space-x-8 font-semibold text-gray-700">
+        <a href="#dashboard" class="hover:text-teal-600 transition">Dashboard</a>
+        <a href="#contacts" class="hover:text-teal-600 transition">Contacts</a>
+        <a href="#commentForm" class="hover:text-teal-600 transition">Community</a>
+        <!-- User Controls (Initially Hidden) -->
+<div id="userControls" class="hidden flex items-center space-x-4">
+  <!-- Avatar -->
+  <div id="userAvatar"
+    class="w-9 h-9 rounded-full bg-teal-600 text-white flex items-center justify-center text-lg font-bold"
+    title="User">
+    P
+  </div>
+
+  <!-- Logout Button -->
+  <button id="logoutBtn" class="text-red-600 font-semibold hover:underline">
+    Logout
+  </button>
+</div>
+
+<!-- Register Button (Shown Only if Not Logged In) -->
+<a id="registerNavBtn" href="login.html"
+  class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition">
+  Register
+</a>
+
+      </div>
+      <button
+        class="md:hidden text-teal-700 focus:outline-none"
+        id="menu-btn"
+        aria-label="Toggle menu"
+      >
+        <i class="fas fa-bars fa-lg"></i>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div
+      class="hidden md:hidden bg-white shadow-md"
+      id="mobile-menu"
+    >
+      <a href="#dashboard" class="block px-6 py-3 border-b border-gray-200 hover:bg-teal-50">Dashboard</a>
+      <a href="#contacts" class="block px-6 py-3 border-b border-gray-200 hover:bg-teal-50">Contacts</a>
+      <a href="#commentForm" class="block px-6 py-3 hover:bg-teal-50">Community</a>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-6 max-w-6xl mt-20 space-y-24">
+  <!-- Hero Section with moving background -->
+  <section
+    class="min-h-screen flex flex-col justify-center items-center text-center text-white px-6 pt-24 relative overflow-hidden bg-moving"
+  >
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative z-10 max-w-4xl">
+      <h1 class="text-5xl md:text-6xl font-playfair font-bold leading-tight drop-shadow-lg">
+        Your Safety, <br />
+        Our Priority
+      </h1>
+      <p class="mt-6 text-lg md:text-xl font-medium drop-shadow-md">
+        Empowering women with emergency assistance, counseling, and community support.
+      </p>
+      <button
+        onclick="document.getElementById('dashboard').scrollIntoView({behavior: 'smooth'})"
+        class="mt-10 bg-amber-400 text-teal-900 font-semibold px-10 py-4 rounded-full shadow-lg hover:shadow-xl transition transform hover:scale-105"
+        aria-label="Get Started"
+      >
+        Get Started
+      </button>
+    </div>
+  </section>
+
+  <!-- Dashboard Section -->
+  <section id="dashboard" class="py-20 bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-6 max-w-7xl">
+      <h2 class="text-4xl font-playfair font-bold text-teal-700 mb-12 text-center">
+        Dashboard
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Cards with background images -->
+        <div
+          class="relative rounded-xl shadow-lg cursor-pointer overflow-hidden group opacity-0 translate-y-10 scroll-animate"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          ata-aos="fade-up"
+  onclick="location.href='emergency.html'"
+          style="background-image: url('https://i.pinimg.com/736x/77/f4/19/77f419d3362ae78a2030f6e3f205c6be.jpg'); background-size: cover; background-position: center;"
+        >
+          <div class="absolute inset-0 bg-black bg-opacity-50 group-hover:scale-105 transform transition-transform duration-300"></div>
+          <div class="relative p-6 flex flex-col items-center text-white">
+            <i class="fas fa-shield-alt text-5xl mb-4 drop-shadow-lg"></i>
+            <h3 class="text-xl font-semibold mb-1">Emergency</h3>
+            <p class="text-center text-sm">Quick access to emergency services and alerts.</p>
+          </div>
+        </div>
+
+        <div
+          class="relative rounded-xl shadow-lg cursor-pointer overflow-hidden group opacity-0 translate-y-10 scroll-animate"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          ata-aos="fade-up"
+  onclick="location.href='Journal.html'"
+          style="background-image: url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=600&q=80'); background-size: cover; background-position: center;"
+        >
+          <div class="absolute inset-0 bg-black bg-opacity-50 group-hover:scale-105 transform transition-transform duration-300"></div>
+          <div class="relative p-6 flex flex-col items-center text-white">
+            <i class="fas fa-book text-5xl mb-4 drop-shadow-lg"></i>
+            <h3 class="text-xl font-semibold mb-1">Journal</h3>
+            <p class="text-center text-sm">Keep personal notes and reflections securely.</p>
+          </div>
+        </div>
+
+        <div
+          class="relative rounded-xl shadow-lg cursor-pointer overflow-hidden group opacity-0 translate-y-10 scroll-animate"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          ata-aos="fade-up"
+  onclick="location.href='selfDefense.html'"
+          style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80'); background-size: cover; background-position: center;"
+        >
+          <div class="absolute inset-0 bg-black bg-opacity-50 group-hover:scale-105 transform transition-transform duration-300"></div>
+          <div class="relative p-6 flex flex-col items-center text-white">
+            <i class="fas fa-fist-raised text-5xl mb-4 drop-shadow-lg"></i>
+            <h3 class="text-xl font-semibold mb-1">Safety-Defence</h3>
+            <p class="text-center text-sm">Easy access to Self defence skills.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted Contacts Section -->
+  <!-- Trusted Contacts Section -->
+    <section id="contacts" class="bg-white  shadow-lg p-8">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-playfair font-bold text-teal-700">Trusted Contacts</h2>
+        <button id="addContactBtn" class="bg-amber-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-amber-700 transition flex items-center gap-2">
+          <i class="fas fa-plus-circle"></i> Add Contact
+        </button>
+      </div>
+      <div id="trustedContactsList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Contact cards will be added here -->
+      </div>
+    </section>
+  <div class="container mx-auto px-6 py-4 max-w-7xl">
+    <h3 class="text-2xl font-bold mb-4">Add a Community Comment</h3>
+    <form id="commentForm" class="flex flex-col space-y-5">
+      <input
+        type="text"
+        id="commentTitle"
+        name="commentTitle"
+        placeholder="Title"
+        required
+        class="border border-gray-300 rounded-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
+      />
+      <textarea
+        id="commentThought"
+        name="commentThought"
+        rows="4"
+        placeholder="Your thought or comment"
+        required
+        class="border border-gray-300 rounded-lg p-3 resize-y focus:outline-none focus:ring-2 focus:ring-teal-400"
+      ></textarea>
+      <input
+        type="url"
+        id="commentImage"
+        name="commentImage"
+        placeholder="Image URL (optional)"
+        class="border border-gray-300 rounded-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
+      />
+      <input
+        type="text"
+        id="commentTags"
+        name="commentTags"
+        placeholder="Tags (comma separated)"
+        class="border border-gray-300 rounded-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
+      />
+      <button
+        type="submit"
+        class="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold hover:brightness-110 transition ripple focus:outline-none focus:ring-4 focus:ring-indigo-400"
+      >
+        Submit Comment
+      </button>
+    </form>
+    <!-- Floating ticker bar -->
+    <div class=" bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-300 py-10 z-50">
+    <div class="overflow-hidden relative max-w-full mx-auto px-6">
+      <div class="marquee-content" id="marqueeContent">
+        <!-- Comment boxes will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+  </div>
+  </main>
+  <!-- Add Contact Modal -->
+  <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" onclick="closeContactModal(event)">
+    <div class="bg-white rounded-xl p-8 max-w-sm w-full text-center shadow-lg relative">
+      <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-teal-700 select-none">Add Trusted Contact</h2>
+      <form id="contactForm" class="space-y-4">
+        <input type="text" id="name" placeholder="Name" required class="border border-gray-300 rounded-lg p-3 w-full" />
+        <input type="tel" id="number" placeholder="Phone Number" required class="border border-gray-300 rounded-lg p-3 w-full" />
+        <input type="text" id="location" placeholder="Location" required class="border border-gray-300 rounded-lg p-3 w-full" />
+        <button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition w-full">Save Contact</button>
+      </form>
+      <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-2xl" onclick="closeContactModal(event)">&times;</button>
+    </div>
+  </div>
+
+  <div id="statusMsg" class="text-center text-lg text-gray-700 mt-4"></div>
+  <!-- SOS Countdown Modal -->
+<div id="sosModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Emergency Alert</h2>
+    <p class="text-gray-700 mb-2">Sending SOS to your trusted contacts in</p>
+    <div class="text-5xl font-extrabold text-red-600 mb-4">
+      <span id="sosCountdown">5</span>
+    </div>
+    <p id="sosLocationText" class="text-sm text-gray-600 mb-4">Fetching your location…</p>
+    <div class="flex justify-center gap-3">
+      <button id="cancelSosBtn" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SOS Success Modal -->
+<div id="sosSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+  <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center shadow-xl">
+    <h2 class="text-2xl font-bold text-green-600 mb-2">Message Sent!</h2>
+    <p class="text-gray-700 mb-4">Your trusted contacts were notified with your current location.</p>
+    <button id="closeSuccessBtn" class="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700">
+      Close
+    </button>
+  </div>
+</div>
+
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile Menu
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Scroll animation
+  const animatedItems = document.querySelectorAll('.scroll-animate');
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-slide-up');
+        entry.target.classList.remove('opacity-0', 'translate-y-10');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  });
+  animatedItems.forEach(item => observer.observe(item));
+
+  // Trusted Contacts Logic
+  let contacts = JSON.parse(localStorage.getItem('trustedContacts')) || [];
+
+  const addContactBtn = document.getElementById('addContactBtn');
+  const contactModal = document.getElementById('contactModal');
+  const contactForm = document.getElementById('contactForm');
+  const trustedContactsList = document.getElementById('trustedContactsList');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+
+  contacts.forEach(addContactCard);
+
+  addContactBtn?.addEventListener('click', () => {
+    contactModal?.classList.remove('hidden');
+  });
+
+  closeModalBtn?.addEventListener('click', () => {
+    contactModal?.classList.add('hidden');
+    contactForm?.reset();
+  });
+
+  contactModal?.addEventListener('click', (e) => {
+    if (e.target === contactModal) {
+      contactModal?.classList.add('hidden');
+      contactForm?.reset();
+    }
+  });
+
+  contactForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const number = document.getElementById('number').value.trim();
+    const location = document.getElementById('location').value.trim();
+
+    if (!name || !number || !location) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    const contact = { id: Date.now(), name, number, location };
+    contacts.push(contact);
+    localStorage.setItem('trustedContacts', JSON.stringify(contacts));
+    addContactCard(contact);
+    contactForm.reset();
+    contactModal.classList.add('hidden');
+  });
+
+  function addContactCard(contact) {
+    const card = document.createElement('div');
+    card.className = 'bg-white border-l-4 border-amber-600 p-4 rounded-lg shadow-md space-y-1 relative';
+    card.dataset.id = contact.id;
+    card.innerHTML = `
+      <h3 class="text-xl font-semibold text-teal-800">${contact.name}</h3>
+      <p class="text-gray-700"><strong>Phone:</strong> ${contact.number}</p>
+      <p class="text-gray-600"><strong>Location:</strong> ${contact.location}</p>
+      <button class="absolute top-2 right-2 text-red-600 hover:text-red-800 text-xl" title="Remove Contact">&times;</button>
+    `;
+    card.querySelector('button').addEventListener('click', () => {
+      card.remove();
+      contacts = contacts.filter(c => c.id !== contact.id);
+      localStorage.setItem('trustedContacts', JSON.stringify(contacts));
+    });
+    trustedContactsList?.appendChild(card);
+  }
+
+  // User Logic
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userControls = document.getElementById('userControls');
+  const userAvatar = document.getElementById('userAvatar');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const registerBtn = document.getElementById('registerNavBtn');
+
+  if (user && userControls && userAvatar && logoutBtn) {
+    userControls.classList.remove('hidden');
+    registerBtn?.classList.add('hidden');
+    const firstLetter = (user.name || user.email || '?').charAt(0).toUpperCase();
+    userAvatar.textContent = firstLetter;
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    });
+  } else {
+    userControls?.classList.add('hidden');
+    registerBtn?.classList.remove('hidden');
+  }
+
+  // Marquee Comments
+  const marqueeContent = document.getElementById('marqueeContent');
+  const commentForm = document.getElementById('commentForm');
+  const bgColors = [
+    'bg-pink-100 text-pink-900',
+    'bg-purple-100 text-purple-900',
+    'bg-indigo-100 text-indigo-900',
+    'bg-teal-100 text-teal-900',
+    'bg-yellow-100 text-yellow-900',
+    'bg-green-100 text-green-900',
+  ];
+
+  const initialComments = [
+    { title: 'Stay Safe', thought: 'Always be aware of your surroundings.', image: '', tags: ['Safety', 'Awareness'] },
+    { title: 'Community Help', thought: 'We are stronger together!', image: '', tags: ['Support'] },
+    { title: 'Self Defense', thought: 'Learn basic self-defense techniques.', image: '', tags: ['Advice'] },
+    { title: 'Emergency Tips', thought: 'Keep emergency numbers handy.', image: '', tags: ['Safety'] },
+  ];
+
+  function createCommentBox({ title, thought, image, tags }) {
+    const box = document.createElement('div');
+    const colorClass = bgColors[Math.floor(Math.random() * bgColors.length)];
+    box.className = `inline-block rounded-lg shadow-md p-4 min-w-[280px] max-w-xs flex-shrink-0 ${colorClass} select-text`;
+    let tagsHtml = '';
+    if (tags && tags.length) {
+      tagsHtml = tags.map(tag =>
+        `<span class="inline-block bg-white bg-opacity-30 text-sm font-semibold mr-2 mb-2 px-3 py-1 rounded-full">${tag.trim()}</span>`
+      ).join('');
+    }
+    box.innerHTML = `
+      <h4 class="font-bold text-lg mb-1 truncate">${title}</h4>
+      <p class="text-sm mb-2 line-clamp-3">${thought}</p>
+      ${image ? `<img src="${image}" alt="Post image" class="rounded-md mb-2 max-h-32 w-full object-cover" />` : ''}
+      <div class="flex flex-wrap">${tagsHtml}</div>
+    `;
+    return box;
+  }
+
+  function initMarquee() {
+    if (!marqueeContent) return;
+    marqueeContent.innerHTML = '';
+    [...initialComments, ...initialComments].forEach(comment => {
+      marqueeContent.appendChild(createCommentBox(comment));
+    });
+  }
+
+  initMarquee();
+
+  commentForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = commentForm.commentTitle.value.trim();
+    const thought = commentForm.commentThought.value.trim();
+    const image = commentForm.commentImage.value.trim();
+    const tagsRaw = commentForm.commentTags.value.trim();
+    if (!title || !thought) return;
+    const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()) : [];
+    const newComment = { title, thought, image, tags };
+    marqueeContent.appendChild(createCommentBox(newComment));
+    marqueeContent.appendChild(createCommentBox(newComment).cloneNode(true));
+    commentForm.reset();
+  });
+});
+</script>
+<script>
+// SOS button logic
+sosButton.addEventListener('click', function () {
+  if (contacts.length === 0) {
+    displayMessage("🚫 Please add at least one trusted contact.");
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    displayMessage("❌ Geolocation is not supported by your browser.");
+    return;
+  }
+
+  displayMessage("📡 Getting your location...");
+  
+  navigator.geolocation.getCurrentPosition(success, error);
+});
+
+function success(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+
+  const locationURL = `https://maps.google.com/?q=${latitude},${longitude}`;
+  const message = `🚨 Emergency! I need help. My location: ${locationURL}`;
+
+  sendMessageToContacts(message);
+}
+
+function error() {
+  displayMessage("❌ Location access denied or unavailable.");
+}
+
+function displayMessage(msg) {
+  messageDiv.textContent = msg;
+  messageDiv.classList.remove('hidden');
+}
+</script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const panicButton = document.getElementById('panicButton');
+  const sosModal = document.getElementById('sosModal');
+  const sosCountdownEl = document.getElementById('sosCountdown');
+  const cancelSosBtn = document.getElementById('cancelSosBtn');
+  const sosLocationText = document.getElementById('sosLocationText');
+  const sosSuccessModal = document.getElementById('sosSuccessModal');
+  const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+  // Adjust this to your backend URL (must implement /api/sos)
+  const SOS_API_URL = 'http://localhost:3000/api/sos';
+
+  // triple-press detection
+  const CLICK_WINDOW_MS = 2000;
+  let clickTimes = [];
+
+  let countdownTimer = null;
+  let countdown = 5;
+  let geo = null;
+  let cancelled = false;
+
+  // 1) Detect triple click
+  panicButton.addEventListener('click', () => {
+    const now = Date.now();
+    clickTimes.push(now);
+    // keep only clicks inside window
+    clickTimes = clickTimes.filter((t) => now - t <= CLICK_WINDOW_MS);
+
+    if (clickTimes.length >= 3) {
+      clickTimes = [];
+      launchSOS();
+    }
+  });
+
+  async function launchSOS() {
+    cancelled = false;
+    countdown = 5;
+    sosCountdownEl.textContent = countdown.toString();
+    sosLocationText.textContent = 'Fetching your location…';
+    show(sosModal);
+
+    // get contacts from localStorage
+    const contacts = JSON.parse(localStorage.getItem('trustedContacts')) || [];
+    if (!contacts.length) {
+      alert('No trusted contacts found. Please add one first.');
+      hide(sosModal);
+      return;
+    }
+
+    // get location
+    try {
+      geo = await getLocation();
+      const mapLink = `https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+      sosLocationText.innerHTML = `
+        Location detected:<br />
+        <a href="${mapLink}" target="_blank" class="text-blue-600 underline">
+          ${geo.latitude.toFixed(5)}, ${geo.longitude.toFixed(5)}
+        </a>
+      `;
+    } catch (e) {
+      geo = null;
+      sosLocationText.textContent = 'Could not get location (user denied or unavailable). Still proceeding.';
+    }
+
+    // 2) Start countdown
+    countdownTimer = setInterval(async () => {
+      if (cancelled) return;
+      countdown--;
+      sosCountdownEl.textContent = countdown.toString();
+
+      if (countdown <= 0) {
+        clearInterval(countdownTimer);
+        await sendSOS(contacts, geo);
+      }
+    }, 1000);
+  }
+
+  cancelSosBtn.addEventListener('click', () => {
+    cancelled = true;
+    clearInterval(countdownTimer);
+    hide(sosModal);
+  });
+
+  closeSuccessBtn.addEventListener('click', () => {
+    hide(sosSuccessModal);
+  });
+
+  async function sendSOS(contacts, geo) {
+    // build message
+    let msg = '🚨 EMERGENCY! I need help.\n';
+    if (geo) {
+      msg += `My location: https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+    } else {
+      msg += 'Location not available.';
+    }
+
+    try {
+      // call backend to actually send SMS/WhatsApp/etc.
+      await fetch(SOS_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contacts,
+          message: msg,
+          location: geo,
+        }),
+      });
+
+      hide(sosModal);
+      show(sosSuccessModal);
+    } catch (err) {
+      console.error('SOS send error:', err);
+      hide(sosModal);
+      alert('Failed to send SOS. Please check your internet or backend.');
+    }
+  }
+
+  function getLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+          });
+        },
+        (err) => reject(err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    });
+  }
+
+  function show(el) {
+    el?.classList.remove('hidden');
+  }
+  function hide(el) {
+    el?.classList.add('hidden');
+  }
+});
+</script>
+<!-- Tailwind line-clamp plugin for truncating text -->
+  <script>
+    tailwind.config = {
+      plugins: [function({ addUtilities }) {
+        addUtilities({
+          '.line-clamp-3': {
+            overflow: 'hidden',
+            display: '-webkit-box',
+            '-webkit-line-clamp': '3',
+            '-webkit-box-orient': 'vertical',
+          }
+        })
+      }]
+    }
+  </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Empowering women through safety technology">
+    <title>SheGuard - Women's Safety Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2B6CB0",
+                        secondary: "#2C5282",
+                        accent: "#4299E1", 
+                        dark: "#1A1A2E",
+                        light: "#F8F9FA",
+                        success: "#4BB543"
+                    },
+                    fontFamily: {
+                        sans: ["Poppins", "sans-serif"],
+                        serif: ["Playfair Display", "serif"]
+                    },
+                    boxShadow: {
+                        panic: "0 10px 30px rgba(255, 62, 108, 0.5)",
+                        card: "0 8px 25px rgba(58, 15, 71, 0.1)"
+                    },
+                    animation: {
+                        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                        float: "float 6s ease-in-out infinite"
+                    },
+                    keyframes: {
+                        float: {
+                            "0%, 100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-10px)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-light text-dark">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-primary/10 to-accent/10">
+        <form id="loginForm" class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md border border-gray-100">
+            <!-- Hero Image -->
+            <div class="h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center relative overflow-hidden">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fc6761a4-848f-46fd-8dfd-142c3a4f882c.png" alt="SheGuard logo with protective female silhouette" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div class="bg-white/80 backdrop-blur-sm p-4 rounded-full">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/24a25168-0cdb-417e-88de-b1e2843896c1.png" alt="App icon" class="w-16 h-16 animate-float">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <h1 class="text-3xl font-serif font-bold text-center text-dark mb-2">SheGuard</h1>
+                <p class="text-center text-gray-600 mb-8">Your personal safety companion</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="far fa-envelope"></i>
+                            </div>
+                            <input type="email" id="loginEmail" class="w-full pl-10 pr-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <input type="password" id="loginPassword" class="w-full pl-10 pr-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="••••••••" required minlength="8">
+                            <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors" id="togglePassword" aria-label="Toggle password visibility">
+                                <i id="passwordIcon" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="rememberMe" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded" checked>
+                            <span class="ml-2 text-sm text-gray-600">Keep me signed in</span>
+                        </div>
+                        <a href="#" id="showReset" class="text-sm text-primary hover:underline">Forgot password?</a>
+                    </div>
+                    
+                    <button id="loginBtn" type="submit" class="w-full mt-6 bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
+                        <div id="loginSpinner" class="hidden h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        <i class="fas fa-shield-alt mr-2"></i> Sign In
+                    </button>
+                    
+                    <div class="text-center text-sm text-gray-500 mt-6">
+                        Don't have an account? <a href="#" id="showRegister" class="text-primary font-medium hover:underline">Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Registration Screen -->
+    <div id="registrationScreen" class="hidden min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-primary/10 to-accent/10">
+        <form id="registerForm" class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md border border-gray-100">
+            <div class="h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center relative overflow-hidden">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fc6761a4-848f-46fd-8dfd-142c3a4f882c.png" alt="SheGuard logo" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div class="bg-white/80 backdrop-blur-sm p-4 rounded-full">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/24a25168-0cdb-417e-88de-b1e2843896c1.png" alt="App icon" class="w-16 h-16 animate-float">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <h1 class="text-3xl font-serif font-bold text-center text-dark mb-2">Register</h1>
+                <p class="text-center text-gray-600 mb-8">Create your account</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" id="registerName" class="w-full pl-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Name" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="registerEmail" class="w-full pl-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="your@email.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                        <input type="password" id="registerPassword" class="w-full pl-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="••••••••" required minlength="8">
+                        <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors" id="toggleRegisterPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 8 characters</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="phoneNumber" 
+                               class="w-full pl-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                               placeholder="+1 234 567 890" 
+                               pattern="^\+[\d\s]{8,}$"
+                               title="Include country code (+1 for US)"
+                               required>
+                    </div>
+                    
+                    <button id="registerBtn" type="submit" class="w-full mt-6 bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
+                        <i class="fas fa-user-plus mr-2"></i> Register
+                    </button>
+                    
+                    <div class="text-center text-sm text-gray-500 mt-6">
+                        Already have an account? <a href="#" id="showLogin" class="text-primary font-medium hover:underline">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Reset Password Screen -->
+    <div id="resetScreen" class="hidden min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-primary/10 to-accent/10">
+        <form id="resetForm" class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md border border-gray-100">
+            <div class="h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center relative overflow-hidden">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fc6761a4-848f-46fd-8dfd-142c3a4f882c.png" alt="SheGuard logo" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div class="bg-white/80 backdrop-blur-sm p-4 rounded-full">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/24a25168-0cdb-417e-88de-b1e2843896c1.png" alt="App icon" class="w-16 h-16 animate-float">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <h1 class="text-3xl font-serif font-bold text-center text-dark mb-2">Reset Password</h1>
+                <p class="text-center text-gray-600 mb-8">Enter your email to reset your password</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="resetEmail" class="w-full pl-4 py-3 bg-light border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="your@email.com" required>
+                    </div>
+                    
+                    <button id="resetBtn" type="submit" class="w-full mt-6 bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
+                        <i class="fas fa-paper-plane mr-2"></i> Send Reset Link
+                    </button>
+                    
+                    <div class="text-center text-sm text-gray-500 mt-6">
+                        Remembered your password? <a href="#" id="showLoginFromReset" class="text-primary font-medium hover:underline">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading spinner -->
+    <div id="loadingSpinner" class="hidden fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+    </div>
+
+    <script src="js/auth.js" defer></script>
+</body>
+</html>
