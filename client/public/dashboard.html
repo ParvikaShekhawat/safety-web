@@ -350,6 +350,11 @@
   </div>
 </div>
 
+<button id="voiceTriggerBtn"
+  class=" hidden fixed bottom-36 right-8 z-40 bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-full shadow-lg">
+  🎙️ Enable Voice Alert
+</button>
+
 
   <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -704,6 +709,70 @@ function displayMessage(msg) {
     el?.classList.add('hidden');
   }
 });
+</script>
+
+<script>
+document.getElementById('voiceTriggerBtn').addEventListener('click', () => {
+  // Check if browser supports SpeechRecognition
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Voice recognition not supported in this browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.continuous = true;
+  recognition.interimResults = false;
+
+  recognition.start();
+  alert("Voice alert listening started. Say 'help me' to trigger SOS.");
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    console.log("Heard: ", transcript);
+
+    if (transcript.includes("help me")) {
+      recognition.stop(); // stop further listening
+      triggerSOS(); // trigger your SOS function
+    }
+  };
+
+  recognition.onerror = function(event) {
+    console.error("Speech Recognition Error:", event.error);
+  };
+});
+
+function triggerSOS() {
+  if (contacts.length === 0) {
+    alert("Please add a trusted contact first.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const locationURL = `https://maps.google.com/?q=${lat},${lon}`;
+    const message = `⚠️ Emergency! I need help. My location: ${locationURL}`;
+
+    // Send to backend
+    fetch('http://localhost:5000/api/sos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contacts: contacts.map(c => c.number),
+        message: message
+      }),
+    })
+    .then(res => res.ok ? alert("SOS sent!") : alert("Failed to send SOS"))
+    .catch(err => console.error("Error sending SOS:", err));
+  }, () => {
+    alert("Location access denied. Cannot send SOS.");
+  });
+}
+
 </script>
 <!-- Tailwind line-clamp plugin for truncating text -->
   <script>
