@@ -60,12 +60,6 @@ If secrets are accidentally pushed, use BFG Repo-Cleaner
 
 ---
 
-## 🤝 Contribution
-
-Want to improve this? Open issues or PRs — all contributions are welcome!
-
----
-
 ## 🙏 Acknowledgements
 
 - [Twilio](https://www.twilio.com/) for reliable messaging API
