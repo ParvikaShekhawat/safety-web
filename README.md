@@ -40,13 +40,14 @@
 
 ---
 
-## 🛑 GitHub Push Safety
+🔐 GitHub Safety Practices
+To protect sensitive data:
 
-To ensure secrets aren’t pushed:
+.env files and credentials are excluded via .gitignore
 
-- Always create a `.gitignore`
-- Never commit `.env` or credentials
-- Use tools like [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/) if you accidentally pushed secrets
+Use environment variables for keys and secrets
+
+If secrets are accidentally pushed, use BFG Repo-Cleaner
 
 ---
 
@@ -75,7 +76,7 @@ Want to improve this? Open issues or PRs — all contributions are welcome!
 
 ## 📃 License
 
-This project is open-source and available under the MIT License.
+This project is licensed under the MIT License.
 
 
 
