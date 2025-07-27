@@ -33,7 +33,7 @@
 ## ⚙️ Tech Stack
 
 - **Frontend**: HTML, CSS (Tailwind), JavaScript
-- **Backend (Optional)**: Node.js + Twilio (for SMS service)
+- **Backend**: Node.js + Twilio (for SMS service)
 
 ---
 
